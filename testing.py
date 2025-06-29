@@ -1,4 +1,5 @@
 import requests
+import json
 
 name = 'General Hospital'
 api_key = 'Q9kYwJQzB7rgYdkLcVFjJA==qVlfx6pqzZsymX8T'  # Replace with your actual API key
@@ -12,12 +13,19 @@ response = requests.get(api_url, headers={'X-Api-Key': api_key})
 # Check the response
 if response.status_code == requests.codes.ok:
     data = response.json()
-    for hospital in data:
-        print("Name:", hospital.get("name", "N/A"))
-        print("Address:", hospital.get("address", "N/A"))
-        print("City:", hospital.get("city", "N/A"))
-        print("State:", hospital.get("state", "N/A"))
-        print("Zip:", hospital.get("zip", "N/A"))
-        print("-" * 40)
+
+    print(f"\n✅ Number of records returned: {len(data)}")
+
+    if data:
+        print("\n🗂️  Keys (columns) in each record:")
+        print(list(data[0].keys()))
+
+        print("\n📋 All hospital records:")
+        for i, record in enumerate(data, start=1):
+            print(f"\n--- Record {i} ---")
+            print(json.dumps(record, indent=4))
+    else:
+        print("No data returned.")
 else:
-    print("Error:", response.status_code, response.text)
+    print("❌ Error:", response.status_code, response.text)
+
